@@ -13,10 +13,10 @@ type DB struct {
 
 var dbConn = &DB{}
 
-func ConnectPSQL(host, user, password, dbname string) (*DB, error){
-  psqlInfo := fmt.Sprintf("host=%s user=%s "+
+func ConnectPSQL(host, port int, user, password, dbname string) (*DB, error){
+  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
     "password=%s dbname=%s sslmode=disable",
-    host, user, password, dbname)
+    host, port, user, password, dbname)
   
   db, err := sql.Open("postgres", psqlInfo)
   
