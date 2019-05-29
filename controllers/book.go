@@ -2,10 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
-  "github.com/gorilla/mux"
   "log"
   "net/http"
-  "strconv"
+  //"strconv"
   "github.com/JamesAndresCM/book_api_go/models"
 	"github.com/JamesAndresCM/book_api_go/driver"
 )
