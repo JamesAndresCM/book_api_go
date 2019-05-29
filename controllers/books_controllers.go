@@ -1,4 +1,4 @@
-package bookscontrollers
+package controllers
 
 import (
 	"encoding/json"
