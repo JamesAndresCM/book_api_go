@@ -40,7 +40,7 @@ func (c Controller) getBooks(db *driver.DB) http.HandlerFunc {
   
   
   
-  
+  /*
   func getBook(db *driver.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 	  var book models.Book
@@ -64,5 +64,6 @@ func (c Controller) getBooks(db *driver.DB) http.HandlerFunc {
   
   func removeBook(w http.ResponseWriter, r *http.Request) {
 	log.Println("remove book")
-  }
+	}
+	*/
   
