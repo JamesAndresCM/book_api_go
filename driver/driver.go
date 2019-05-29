@@ -13,7 +13,7 @@ type DB struct {
 
 var dbConn = &DB{}
 
-func ConnectPSQL(host,user, password, dbname string, port int) (*DB, error){
+func ConnectPSQL(host string,user string, password string, dbname string, port int) (*DB, error){
   psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
     "password=%s dbname=%s sslmode=disable",
     host, port, user, password, dbname)
