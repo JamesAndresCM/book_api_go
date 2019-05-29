@@ -10,6 +10,7 @@ import (
 	"github.com/JamesAndresCM/book_api_go/driver"
 )
 
+type Controller struct{}
 
 var books []models.Book
 
@@ -19,22 +20,23 @@ func logFatal(err error){
   }
 }
 
-func getBooks(db *driver.DB) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-	  var book models.Book
-	  books = []models.Book{}
-	  rows, err := db.SQL.Query("SELECT *  FROM books")
-	  logFatal(err)
-  
-	  defer rows.Close()
-	  for rows.Next(){
-		err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
-		logFatal(err)
-		books = append(books, book)
-	  }
-	  json.NewEncoder(w).Encode(books)
-	}
-  }
+func (c Controller) getBooks(db *driver.DB) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			var book models.Book
+			books = []models.Book{}
+			rows, err := db.SQL.Query("SELECT *  FROM books")
+			logFatal(err)
+		
+			defer rows.Close()
+			for rows.Next(){
+			err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
+			logFatal(err)
+			books = append(books, book)
+			}
+			json.NewEncoder(w).Encode(books)
+		}
+}
+
   
   
   
