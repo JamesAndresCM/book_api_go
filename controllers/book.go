@@ -19,7 +19,7 @@ func logFatal(err error){
   }
 }
 
-func (c *Controller) getBooks(db *driver.DB) http.HandlerFunc {
+func (c Controller) getBooks(db *driver.DB) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			var book models.Book
 			books = []models.Book{}
