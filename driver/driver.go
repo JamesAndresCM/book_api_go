@@ -24,12 +24,6 @@ func ConnectPSQL(host, port, user, password, dbname string) (*DB, error){
   if err != nil {
     panic(err)
   }
-  defer db.Close()
-
-  err = db.Ping()
-  if err != nil {
-    panic(err)
-  }
 
   dbConn.SQL = db
 	return dbConn, err
