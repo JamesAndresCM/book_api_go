@@ -1,7 +1,7 @@
 package main
 
 import (
-	"os"
+  "os"
   "github.com/gorilla/mux"
   "log"
   "net/http"
@@ -20,24 +20,26 @@ func logFatal(err error){
 }
 
 func main(){
+
   gotenv.Load()
 
   dbName := os.Getenv("DB_NAME")
   dbPass := os.Getenv("DB_PASS")
   dbHost := os.Getenv("DB_HOST")
   dbPort := os.Getenv("DB_PORT")
-  
+
   portdb, _ := strconv.Atoi(dbPort)
 	db, err := driver.ConnectPSQL(dbHost, "snake", dbPass, dbName, portdb)
 	logFatal(err)
-
   router := mux.NewRouter()
   controller := controllers.Controller{}
-  router.HandleFunc("/books", controller.getBooks(db)).Methods("GET")
-  /*router.HandleFunc("/books/{id}", getBook(db)).Methods("GET")
-  router.HandleFunc("/books", addBook).Methods("POST")
+  router.HandleFunc("/books", controller.GetBooks(db)).Methods("GET")
+  router.HandleFunc("/books/{id}", controller.GetBook(db)).Methods("GET")
+  router.HandleFunc("/books/{id}", controller.DestroyBook(db)).Methods("DELETE")
+  /*router.HandleFunc("/books", addBook).Methods("POST")
   router.HandleFunc("/books", updateBook).Methods("PUT")
   router.HandleFunc("/books/{id}", removeBook).Methods("DELETE")
 */
-  logFatal(http.ListenAndServe(":8000", router))
+//  fmt.Println(http.ListenAndServe(":8080", nil))
+  logFatal(http.ListenAndServe(":3000", router))
 }
