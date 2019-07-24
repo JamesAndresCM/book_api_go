@@ -40,7 +40,7 @@ func (c Controller) GetBooks(db *driver.DB) http.HandlerFunc {
 }
 
 func (c Controller) GetBook(db *driver.DB) http.HandlerFunc {
-  return func(w http.ResponseWriter, r * http.Request) {
+  return func(w http.ResponseWriter, r *http.Request) {
     var book models.Book
     data_not_found := make(map[string]string)
     params := mux.Vars(r)
@@ -59,7 +59,7 @@ func (c Controller) GetBook(db *driver.DB) http.HandlerFunc {
 
 
 func (c Controller) DestroyBook(db *driver.DB) http.HandlerFunc {
-  return func(w http.ResponseWriter, r * http.Request) {
+  return func(w http.ResponseWriter, r *http.Request) {
     var book models.Book
     params := mux.Vars(r)
     bookid, err := strconv.Atoi(params["id"])
@@ -72,8 +72,18 @@ func (c Controller) DestroyBook(db *driver.DB) http.HandlerFunc {
     } else {
       json.NewEncoder(w).Encode("book not found")
     }
-//    error := rows.Scan()
-    //logFatal(err)
+  }
+}
+
+func (c Controller) AddBook(db *driver.DB) http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request){
+    var book models.Book
+    var bookID int
+    json.NewDecoder(r.Body).Decode(&book)
+    err := db.SQL.QueryRow("INSER INTO books (title, author, year) values ($1,$2,$3) RETURNING id;",
+      book.Title, book.Author, book.Year).Scan(&bookID)
+      logFatal(err)
+    json.NewEncoder(w).Encode(bookID)
   }
 }
 /*
