@@ -84,42 +84,8 @@ func (c Controller) AddBook(db *driver.DB) http.HandlerFunc {
     error := db.SQL.QueryRow("INSERT INTO books (title, author, year) values ($1,$2,$3) RETURNING id;",
       book.Title, book.Author, book.Year).Scan(&bookID)
       logFatal(error)
-    id = strconv.Itoa(bookID)
+    id := strconv.Itoa(bookID)
     book_message["success"] = "book" + id + "has been added"
     json.NewEncoder(w).Encode(book_message)
   }
 }
-/*
-posible callback id
-func getID(db *driver.DB, id int) {
-  var book models.Book
-  rows := db.SQL.QueryRow("SELECT * FROM books where id=$1", bookid)
-  error := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
-
-}
-/*
-func getBook(db *driver.DB) func(w http.ResponseWriter, r *http.Request) {
-  return func(w http.ResponseWriter, r *http.Request) {
-    var book models.Book
-    params := mux.Vars(r)
-    bookid, err := strconv.Atoi(params["id"])
-    logFatal(err)
-    rows := db.SQL.QueryRow("SELECT * FROM books where id=$1", bookid)
-    error := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year)
-    logFatal(error)
-    json.NewEncoder(w).Encode(book)
-  }
-}
-
-func addBook(w http.ResponseWriter, r *http.Request) {
-  log.Println("Add one book")
-}
-
-func updateBook(w http.ResponseWriter, r *http.Request) {
-  log.Println("update book")
-}
-
-func removeBook(w http.ResponseWriter, r *http.Request) {
-  log.Println("remove book")
-}
-*/
