@@ -11,8 +11,6 @@ import (
 	"github.com/JamesAndresCM/book_api_go/driver"
 )
 
-
-
 func logFatal(err error){
   if err != nil {
     log.Fatal(err)
@@ -36,7 +34,8 @@ func main(){
   router.HandleFunc("/books", controller.GetBooks(db)).Methods("GET")
   router.HandleFunc("/books/{id}", controller.GetBook(db)).Methods("GET")
   router.HandleFunc("/books/{id}", controller.DestroyBook(db)).Methods("DELETE")
-  /*router.HandleFunc("/books", addBook).Methods("POST")
+  router.HandleFunc("/books", controller.AddBook(db)).Methods("POST")
+/*
   router.HandleFunc("/books", updateBook).Methods("PUT")
   router.HandleFunc("/books/{id}", removeBook).Methods("DELETE")
 */
