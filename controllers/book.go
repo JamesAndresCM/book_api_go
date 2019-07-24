@@ -97,7 +97,7 @@ func (c Controller) UpdateBook(db *driver.DB) http.HandlerFunc {
     params := mux.Vars(r)
     bookid, err := strconv.Atoi(params["id"])
     logFatal(err)
-    rows, error := db.SQL.QueryRow("UPDATE books set title=$1, author=$2, year=$3 where* FROM books where id="+ bookid
+    rows, error := db.SQL.QueryRow("UPDATE books set title=$1, author=$2, year=$3 where* FROM books where id="+ bookid,
       &book.ID, &book.Title, &book.Author, &book.Year)
     if error == nil {
       json.NewEncoder(w).Encode(book)
