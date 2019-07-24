@@ -79,11 +79,14 @@ func (c Controller) AddBook(db *driver.DB) http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request){
     var book models.Book
     var bookID int
+    book_message := make(map[string]string)
     json.NewDecoder(r.Body).Decode(&book)
     error := db.SQL.QueryRow("INSERT INTO books (title, author, year) values ($1,$2,$3) RETURNING id;",
       book.Title, book.Author, book.Year).Scan(&bookID)
       logFatal(error)
-    json.NewEncoder(w).Encode(bookID)
+    id = strconv.Itoa(bookID)
+    book_message["success"] = "book" + id + "has been added"
+    json.NewEncoder(w).Encode(book_message)
   }
 }
 /*
