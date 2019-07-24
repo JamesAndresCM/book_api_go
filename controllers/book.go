@@ -25,7 +25,7 @@ func (c Controller) GetBooks(db *driver.DB) http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
     var book models.Book
     books = []models.Book{}
-    rows, err := db.SQL.Query("SELECT *  FROM books")
+    rows, err := db.SQL.Query("SELECT * FROM books")
     logFatal(err)
 
     defer rows.Close()
@@ -85,7 +85,27 @@ func (c Controller) AddBook(db *driver.DB) http.HandlerFunc {
       book.Title, book.Author, book.Year).Scan(&bookID)
       logFatal(error)
     id := strconv.Itoa(bookID)
-    book_message["success"] = "book" + id + "has been added"
+    book_message["success"] = "book id: " + id + " has been added"
     json.NewEncoder(w).Encode(book_message)
   }
 }
+
+func (c Controller) UpdateBook(db *driver.DB) http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request) {
+    var book models.Book
+    data_not_found := make(map[string]string)
+    params := mux.Vars(r)
+    bookid, err := strconv.Atoi(params["id"])
+    logFatal(err)
+    rows, error := db.SQL.QueryRow("UPDATE books set title=$1, author=$2, year=$3 where* FROM books where id="+ bookid
+      &book.ID, &book.Title, &book.Author, &book.Year)
+    if error == nil {
+      json.NewEncoder(w).Encode(book)
+    } else {
+      data_not_found["error"] = "book not found"
+      json.NewEncoder(w).Encode(data_not_found)
+    }
+  }
+}
+
+
