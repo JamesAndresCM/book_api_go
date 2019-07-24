@@ -31,14 +31,11 @@ func main(){
 	logFatal(err)
   router := mux.NewRouter()
   controller := controllers.Controller{}
+  router.HandleFunc("/", controller.GetBooks(db)).Methods("GET")
   router.HandleFunc("/books", controller.GetBooks(db)).Methods("GET")
   router.HandleFunc("/books/{id}", controller.GetBook(db)).Methods("GET")
   router.HandleFunc("/books/{id}", controller.DestroyBook(db)).Methods("DELETE")
+  router.HandleFunc("/books/{id}", controller.UpdateBook(db)).Methods("PUT")
   router.HandleFunc("/books", controller.AddBook(db)).Methods("POST")
-/*
-  router.HandleFunc("/books", updateBook).Methods("PUT")
-  router.HandleFunc("/books/{id}", removeBook).Methods("DELETE")
-*/
-//  fmt.Println(http.ListenAndServe(":8080", nil))
   logFatal(http.ListenAndServe(":3000", router))
 }
