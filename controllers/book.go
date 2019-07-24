@@ -93,17 +93,21 @@ func (c Controller) AddBook(db *driver.DB) http.HandlerFunc {
 func (c Controller) UpdateBook(db *driver.DB) http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
     var book models.Book
-    data_not_found := make(map[string]string)
+    json.NewDecoder(r.Body).Decode(&book)
+    data_book := make(map[string]string)
     params := mux.Vars(r)
-    bookid := strconv.Itoa(params["id"])
-    error := db.SQL.QueryRow("UPDATE books set title=$1, author=$2, year=$3 where* FROM books where id="+ bookid,
-      &book.ID, &book.Title, &book.Author, &book.Year)
-    if error == nil {
-      json.NewEncoder(w).Encode(book)
-    } else {
-      data_not_found["error"] = "book not found"
-      json.NewEncoder(w).Encode(data_not_found)
+    bookid, err := strconv.Atoi(params["id"])
+    logFatal(err)
+    result, err := db.SQL.Exec("UPDATE books set title=$1, author=$2, year=$3 where id=$4",
+      &book.Title, &book.Author, &book.Year, bookid)
+    rows, err := result.RowsAffected()
+    id := strconv.Itoa(bookid)
+    if rows > 0 {
+        data_book["message"] = "book id: " + id + " has been updated"
+      } else {
+        data_book["message"] = "book id: " + id + " not found"
     }
+    json.NewEncoder(w).Encode(data_book)
   }
 }
 
