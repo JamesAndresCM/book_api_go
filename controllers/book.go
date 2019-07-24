@@ -80,9 +80,9 @@ func (c Controller) AddBook(db *driver.DB) http.HandlerFunc {
     var book models.Book
     var bookID int
     json.NewDecoder(r.Body).Decode(&book)
-    err := db.SQL.QueryRow("INSER INTO books (title, author, year) values ($1,$2,$3) RETURNING id;",
+    error := db.SQL.QueryRow("INSERT INTO books (title, author, year) values ($1,$2,$3) RETURNING id;",
       book.Title, book.Author, book.Year).Scan(&bookID)
-      logFatal(err)
+      logFatal(error)
     json.NewEncoder(w).Encode(bookID)
   }
 }
